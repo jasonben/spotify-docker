@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+spotify() {
+  docker volume create spotify 1>/dev/null 2>/dev/null
+  local COMPOSE_DIR=$(dirname "$0")
+  local COMPOSE_FILE="$COMPOSE_DIR/spotify-docker/docker/docker-compose.yml"
+  local COMPOSE="docker compose -f $COMPOSE_FILE"
+
+  $COMPOSE up -d 2>/dev/null
+  $COMPOSE --profile=frontend run -it --rm spotify-tui
+} ; spotify

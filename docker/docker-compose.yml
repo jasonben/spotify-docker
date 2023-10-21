@@ -1,0 +1,25 @@
+services:
+  spotify-tui:
+    profiles:
+      - frontend
+    image: jasonben/spotify-tui
+    tty: true
+    stdin_open: true
+    volumes:
+      - spotify:/root/.config/spotify-tui
+
+  spotifyd:
+    image: jasonben/spotifyd
+    user: ${UID}
+    volumes:
+      - /run/user/1000/pulse/native:/var/run/pulseaudio.sock
+    entrypoint: [ "/usr/local/bin/spotifyd",
+      "--no-daemon",
+      "--device-name=${SPOTIFY_DEVICE}",
+      "--username=${SPOTIFY_USERNAME}",
+      "--password=${SPOTIFY_PASSWORD}"
+    ]
+
+volumes:
+  spotify:
+    external: true
